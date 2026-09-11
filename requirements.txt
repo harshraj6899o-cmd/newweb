@@ -1,2 +1,0 @@
-twilio==9.3.7
-playsound==1.2.2

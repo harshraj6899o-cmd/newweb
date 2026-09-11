@@ -6663,6 +6663,392 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })();
 </script>
+// ...existing code...
+<style>
+  body:not(.pathner-logged-in) .pathner-app {
+    display: none !important;
+  }
 
+  body.pathner-logged-in .pathner-app {
+    display: flex !important;
+  }
+
+  body.pathner-logged-in .pathner-login-screen {
+    display: none !important;
+  }
+
+  .pathner-login-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(7, 15, 12, 0.92);
+    backdrop-filter: blur(10px);
+    padding: 24px;
+  }
+
+  .pathner-login-box {
+    width: min(460px, 92vw);
+    background: rgba(18, 28, 23, 0.97);
+    border: 1px solid rgba(63, 224, 138, 0.28);
+    border-radius: 24px;
+    padding: 28px 24px;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.46);
+    color: #edf5ef;
+  }
+
+  .pathner-login-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .pathner-login-logo {
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #3fe08a, #48b4ff);
+    color: #06110d;
+    font-weight: 900;
+    font-size: 1.4rem;
+  }
+
+  .pathner-login-brand h2 {
+    margin: 0;
+    font-size: 1.6rem;
+  }
+
+  .pathner-login-brand p {
+    margin: 4px 0 0;
+    color: #a8beb1;
+    font-size: 0.82rem;
+  }
+
+  .pathner-auth-switch {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 16px;
+  }
+
+  .pathner-auth-btn {
+    border: none;
+    background: transparent;
+    color: #dfece4;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .pathner-auth-btn.active {
+    background: rgba(63, 224, 138, 0.15);
+    border: 1px solid rgba(63, 224, 138, 0.35);
+    color: #effff5;
+  }
+
+  .pathner-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .pathner-hidden {
+    display: none !important;
+  }
+
+  .pathner-login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pathner-login-field label {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #afc7bc;
+  }
+
+  .pathner-login-field input,
+  .pathner-login-field select,
+  .pathner-login-field textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 12px;
+    color: #edf5ef;
+    padding: 12px 14px;
+    font-size: 1rem;
+    outline: none;
+  }
+
+  .pathner-login-field input:focus,
+  .pathner-login-field select:focus,
+  .pathner-login-field textarea:focus {
+    border-color: rgba(63, 224, 138, 0.7);
+    box-shadow: 0 0 0 3px rgba(63, 224, 138, 0.12);
+  }
+
+  select {
+    color: #edf5ef !important;
+    background: rgba(18, 28, 23, 0.96) !important;
+  }
+
+  option {
+    color: #edf5ef !important;
+    background: #0f1b16 !important;
+  }
+
+  .pathner-login-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 13px 18px;
+    background: linear-gradient(135deg, #3fe08a, #22c996);
+    color: #06110d;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .pathner-login-status {
+    min-height: 20px;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: #ffb8b8;
+  }
+
+  .pathner-login-demo {
+    margin-top: 12px;
+    color: #9eb8aa;
+    text-align: center;
+    line-height: 1.7;
+    font-size: 0.78rem;
+  }
+
+  .pathner-logout-btn {
+    background: rgba(255, 117, 117, 0.08);
+    border: 1px solid rgba(255, 117, 117, 0.35);
+    color: #ffc3c3;
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+</style>
+
+// ...existing code...
+<body>
+  <div id="pathnerLoginScreen" class="pathner-login-screen">
+    <div class="pathner-login-box">
+      <div class="pathner-login-brand">
+        <div class="pathner-login-logo">P</div>
+        <div>
+          <h2>PathNER</h2>
+          <p>Government Admin / Truck Driver / Police Access</p>
+        </div>
+      </div>
+
+      <div class="pathner-auth-switch">
+        <button type="button" class="pathner-auth-btn active" data-mode="login">Login</button>
+        <button type="button" class="pathner-auth-btn" data-mode="register">Register</button>
+      </div>
+
+      <form id="pathnerLoginForm" class="pathner-login-form">
+        <div class="pathner-login-field">
+          <label for="pathnerUsername">Username</label>
+          <input id="pathnerUsername" type="text" placeholder="Enter username" required />
+        </div>
+
+        <div class="pathner-login-field">
+          <label for="pathnerPassword">Password</label>
+          <input id="pathnerPassword" type="password" placeholder="Enter password" required />
+        </div>
+
+        <div class="pathner-login-field">
+          <label for="pathnerRole">Role</label>
+          <select id="pathnerRole">
+            <option value="admin">Government Admin</option>
+            <option value="driver">Truck Driver</option>
+            <option value="police">Police Station</option>
+            <option value="ops">Fleet Ops</option>
+          </select>
+        </div>
+
+        <button class="pathner-login-btn" type="submit">Login</button>
+      </form>
+
+      <form id="pathnerRegisterForm" class="pathner-login-form pathner-hidden">
+        <div class="pathner-login-field">
+          <label for="pathnerFullName">Full Name</label>
+          <input id="pathnerFullName" type="text" placeholder="Enter full name" required />
+        </div>
+
+        <div class="pathner-login-field">
+          <label for="pathnerRegUsername">Username</label>
+          <input id="pathnerRegUsername" type="text" placeholder="Choose username" required />
+        </div>
+
+        <div class="pathner-login-field">
+          <label for="pathnerRegPassword">Password</label>
+          <input id="pathnerRegPassword" type="password" placeholder="Choose password" required />
+        </div>
+
+        <div class="pathner-login-field">
+          <label for="pathnerRegRole">Role</label>
+          <select id="pathnerRegRole">
+            <option value="admin">Government Admin</option>
+            <option value="driver">Truck Driver</option>
+            <option value="police">Police Station</option>
+            <option value="ops">Fleet Ops</option>
+          </select>
+        </div>
+
+        <button class="pathner-login-btn" type="submit">Create Account</button>
+      </form>
+
+      <div id="pathnerLoginStatus" class="pathner-login-status"></div>
+
+     
+    </div>
+  </div>
+
+  <div class="pathner-app">
+    // ...existing code...
+  </div>
+
+  <script>
+    (function () {
+      const validUsers = [
+        { username: "admin", password: "admin123", role: "admin", name: "Government Admin" },
+        { username: "driver", password: "driver123", role: "driver", name: "Truck Driver" },
+        { username: "police", password: "police123", role: "police", name: "Police Station" },
+        { username: "ops", password: "ops123", role: "ops", name: "Fleet Ops" }
+      ];
+
+      const loginScreen = document.getElementById("pathnerLoginScreen");
+      const loginForm = document.getElementById("pathnerLoginForm");
+      const registerForm = document.getElementById("pathnerRegisterForm");
+      const statusEl = document.getElementById("pathnerLoginStatus");
+      const authButtons = document.querySelectorAll(".pathner-auth-btn");
+
+      function setStatus(message, isError = false) {
+        statusEl.textContent = message;
+        statusEl.style.color = isError ? "#ffb8b8" : "#9ef0c6";
+      }
+
+      function switchAuth(mode) {
+        const showLogin = mode === "login";
+        loginForm.classList.toggle("pathner-hidden", !showLogin);
+        registerForm.classList.toggle("pathner-hidden", showLogin);
+        authButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
+      }
+
+      function ensureLogoutButton() {
+        const topbarRight = document.querySelector(".topbar-right");
+        if (!topbarRight) return;
+
+        let logoutBtn = document.getElementById("pathnerLogoutBtn");
+        if (!logoutBtn) {
+          logoutBtn = document.createElement("button");
+          logoutBtn.id = "pathnerLogoutBtn";
+          logoutBtn.type = "button";
+          logoutBtn.className = "pathner-logout-btn";
+          logoutBtn.textContent = "Logout";
+          topbarRight.appendChild(logoutBtn);
+        }
+
+        logoutBtn.onclick = function () {
+          localStorage.removeItem("pathner_session_user");
+          document.body.classList.remove("pathner-logged-in");
+          loginScreen.style.display = "flex";
+          loginForm.reset();
+          registerForm.reset();
+          setStatus("");
+          switchAuth("login");
+        };
+      }
+
+      function applyAuthState(user) {
+        document.body.classList.toggle("pathner-logged-in", !!user);
+        if (loginScreen) {
+          loginScreen.style.display = user ? "none" : "flex";
+        }
+        ensureLogoutButton();
+      }
+
+      authButtons.forEach(btn => {
+        btn.addEventListener("click", () => switchAuth(btn.dataset.mode));
+      });
+
+      const savedUser = JSON.parse(localStorage.getItem("pathner_session_user") || "null");
+      if (savedUser) {
+        applyAuthState(savedUser);
+      } else {
+        applyAuthState(null);
+      }
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById("pathnerUsername").value.trim();
+        const password = document.getElementById("pathnerPassword").value.trim();
+        const role = document.getElementById("pathnerRole").value;
+
+        const user = validUsers.find(u =>
+          u.username.toLowerCase() === username.toLowerCase() &&
+          u.password === password &&
+          u.role === role
+        );
+
+        if (!user) {
+          setStatus("Invalid username, password or selected role.", true);
+          return;
+        }
+
+        localStorage.setItem("pathner_session_user", JSON.stringify(user));
+        setStatus("Login successful.");
+        applyAuthState(user);
+      });
+
+      registerForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const fullName = document.getElementById("pathnerFullName").value.trim();
+        const username = document.getElementById("pathnerRegUsername").value.trim();
+        const password = document.getElementById("pathnerRegPassword").value.trim();
+        const role = document.getElementById("pathnerRegRole").value;
+
+        if (!fullName || !username || !password) {
+          setStatus("Please fill all registration fields.", true);
+          return;
+        }
+
+        const exists = validUsers.some(u => u.username.toLowerCase() === username.toLowerCase());
+        if (exists) {
+          setStatus("This username already exists.", true);
+          return;
+        }
+
+        const newUser = { username, password, role, name: fullName };
+        validUsers.push(newUser);
+        localStorage.setItem("pathner_session_user", JSON.stringify(newUser));
+        setStatus("Account created successfully.");
+        applyAuthState(newUser);
+      });
+    })();
+  </script>
+
+  // ...existing code...
+</body>
+</html>
 </body>
 </html>
